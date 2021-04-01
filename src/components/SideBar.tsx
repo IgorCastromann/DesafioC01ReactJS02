@@ -1,33 +1,10 @@
-import { useEffect, useState } from "react";
 import { Button } from "./Button";
-import { api } from '../services/api';
 
 import '../styles/sidebar.scss';
-
-
-interface GenreResponseProps {
-  id: number;
-  name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
-  title: string;
-}
+import { useGlobalContext } from "../App";
 
 export function SideBar() {
-  const [selectedGenreId, setSelectedGenreId] = useState(1);
-
-  const [genres, setGenres] = useState<GenreResponseProps[]>([]);
-  const [selectedGenre, setSelectedGenre] = useState<GenreResponseProps>({} as GenreResponseProps);
-
-  useEffect(() => {
-    api.get<GenreResponseProps[]>('genres').then(response => {
-      setGenres(response.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    api.get<GenreResponseProps>(`genres/${selectedGenreId}`).then(response => {
-      setSelectedGenre(response.data);
-    })
-  }, [selectedGenreId]);
+  const { genres, selectedGenreId, setSelectedGenreId } = useGlobalContext()
 
   function handleClickButton(id: number) {
     setSelectedGenreId(id);
@@ -50,5 +27,4 @@ export function SideBar() {
 
     </nav>
   )
-
 }
